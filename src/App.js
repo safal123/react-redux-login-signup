@@ -1,25 +1,48 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Fragment } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect
+} from "react-router-dom";
+
+import { Provider as AlertProvider } from "react-alert";
+import AlertTemplate from "react-alert-template-basic";
+
+import Header from "./components/layouts/Header";
+import Dashboard from "./components/users/Dashboard";
+import Alerts from "./components/layouts/Alerts";
+
+import { Provider } from "react-redux";
+import store from "./store";
+import Register from "./components/accounts/Register";
+import Login from "./components/accounts/Login";
+
+// alert options
+const alertOptions = {
+  timeout: 3000,
+  position: "top center"
+};
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={store}>
+      <AlertProvider template={AlertTemplate} {...alertOptions}>
+        <Router>
+          <Fragment>
+            <Header />
+            <Alerts />
+            <div className="container">
+              <Switch>
+                <Route path="/" exact component={Dashboard} />
+                <Route path="/register" exact component={Register} />
+                <Route path="/login" exact component={Login} />
+              </Switch>
+            </div>
+          </Fragment>
+        </Router>
+      </AlertProvider>
+    </Provider>
   );
 }
 
